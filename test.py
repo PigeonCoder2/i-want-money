@@ -2,12 +2,13 @@ class Renter:
     
     renters = []
     basic_cost = 119 * 1.15
-    rooms_available = [i for i in range(8)]
+    rooms_available = [i for i in range(1, 9)]
     
     def __init__(self, name, num_of_days, cost, plan=""):
         self.name = name
         self.num_of_days = num_of_days
-        self.cost = cost
+        self.cost = round(cost, 2)
+        print("Cost of stay: ", self.cost)
         self.plan = plan
         
         if len(Renter.rooms_available) == 0:
@@ -18,19 +19,21 @@ class Renter:
         Renter.rooms_available = Renter.rooms_available[1:]
         
         Renter.renters.append(self)
-        
+
+    @classmethod
     def rent_a_room(cls):
         
         print("Input name:")
         name = input()
         
         print("Number of days staying:")
-        num_of_days = input()
+        num_of_days = int(input())
         
         if num_of_days <= 14:
-            return ShortTermRenter(name, num_of_days)
+            ShortTermRenter(name, num_of_days)
         else:
-            return LongTermRenter(name, num_of_days)
+            LongTermRenter(name, num_of_days)
+            
         
     def checkout(room_number):
         for renter in Renter.renters:
@@ -48,13 +51,13 @@ class ShortTermRenter(Renter):
     
     def __init__(self, name, num_of_days):
         
-        cost = self.basic_cost * self.num_of_days
+        cost = self.basic_cost * num_of_days
         
         print("Would they like to purchase the breakfast plan? (Y/N)")
         
         plan = ""
         if input() == "Y":
-            cost += 5.99 * self.num_of_days
+            cost += 5.99 * num_of_days
             plan = "(Breakfast Plan)"
             
         super().__init__(name, num_of_days, cost, plan)
@@ -63,7 +66,7 @@ class LongTermRenter(Renter):
     
     def __init__(self, name, num_of_days):
         
-        cost = self.basic_cost * self.num_of_days * 0.7
+        cost = self.basic_cost * num_of_days * 0.7
         
         print("Would they like to purchase an insurance package?")
         print("0: No Package")
@@ -86,6 +89,7 @@ class LongTermRenter(Renter):
 def main(): 
     while True:
         
+        print()
         print("Make a Selection: ")
         print("Rent a Room (R), Check Out (C), Print Motel Details (P), Exit Program (X)")
         choice = input()
@@ -102,6 +106,7 @@ def main():
                 print(renter)
                 
         elif choice == "X":
+            print("Thank you for using the program!")
             break
         
         
